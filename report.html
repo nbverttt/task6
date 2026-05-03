@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчёт по заданию 6 - Админ-панель</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .step {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        
+        .step:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .step-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .step-body {
+            padding: 20px;
+        }
+        
+        .step-description {
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .step-description ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .step-description li {
+            margin-bottom: 5px;
+        }
+        
+        .screenshot {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .screenshot-caption {
+            margin-top: 10px;
+            color: #777;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Отчёт по заданию 6</h1>
+            <p>Реализация страницы администратора с HTTP-авторизацией</p>
+        </div>
+        
+        <div class="content">
+            
+            <div class="info">
+                <strong>Цель задания:</strong> Реализовать страницу администратора с HTTP-авторизацией для просмотра, редактирования, удаления данных пользователей и просмотра статистики по языкам программирования.
+            </div>
+            
+            <!-- Шаг 1: Создание таблиц БД -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Создание таблиц в базе данных</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Первым шагом необходимо создать новые таблицы для хранения данных администратора, языков программирования и связей между заявками и языками.</p>
+                        
+                        <p><strong>Созданы следующие таблицы:</strong></p>
+                        <ul>
+                            <li><code>admins</code> - таблица для хранения логина и хеша пароля администратора</li>
+                            <li><code>programming_languages</code> - таблица-справочник языков программирования</li>
+                            <li><code>application_languages</code> - таблица связи "многие-ко-многим" между заявками и языками</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Все три таблицы созданы успешно. Таблица <code>admins</code> содержит запись с логином <code>admin</code> и хешированным паролем. Таблица <code>programming_languages</code> заполнена 12 языками.
+                        </div>
+                        
+                        <p><strong>Выполненные SQL-запросы:</strong></p>
+                        <div class="code-block">
+CREATE TABLE IF NOT EXISTS admins (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(32) NOT NULL
+);
+
+INSERT INTO admins (login, password_hash) 
+VALUES ('admin', MD5('admin123'));
+
+CREATE TABLE IF NOT EXISTS programming_languages (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS application_languages (
+    application_id INT UNSIGNED NOT NULL,
+    language_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY (application_id, language_id),
+    FOREIGN KEY (application_id) REFERENCES application(id) ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES programming_languages(id) ON DELETE CASCADE
+);
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="с1.PNG" alt="Создание таблиц в БД">
+                        <div class="screenshot-caption">Скриншот 1: Создание таблиц admins, programming_languages и application_languages</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 2: Git -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Инициализация Git и отправка на GitHub</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Создан новый Git-репозиторий для задания 6 и код отправлен на GitHub.</p>
+                        
+                        <p><strong>Выполненные команды:</strong></p>
+                        <div class="code-block">
+git init
+git add .
+git status
+git commit -m "Задание 6: Админ-панель с HTTP-авторизацией, статистикой"
+git remote add origin https://github.com/nbverttt/task6.git
+git branch -M main
+git push -u origin main
+                        </div>
+                        
+                        <div class="success">
+                            Выполнено: 4 файла (admin.php, form.php, index.php, login.php) отправлены в репозиторий. Коммит: <code>624a083</code>.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c2.PNG" alt="Git push">
+                        <div class="screenshot-caption">Скриншот 2: Инициализация Git и отправка кода на GitHub</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 3: HTTP-авторизация -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Проверка HTTP-авторизации</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Проверка работы HTTP-авторизации через команду <code>curl</code>. При отсутствии авторизации сервер возвращает код 401, при правильном логине и пароле - код 200.</p>
+                        
+                        <p><strong>Как работает HTTP Basic Auth:</strong></p>
+                        <ul>
+                            <li>Браузер отправляет запрос на сервер</li>
+                            <li>Сервер отвечает: <code>401 Unauthorized</code> + заголовок <code>WWW-Authenticate: Basic realm="Admin panel"</code></li>
+                            <li>Браузер показывает окно ввода логина и пароля</li>
+                            <li>При повторном запросе браузер отправляет заголовок <code>Authorization: Basic base64(логин:пароль)</code></li>
+                            <li>Сервер проверяет учётные данные через таблицу <code>admins</code></li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Без авторизации - код 401. С авторизацией (admin:admin123) - код 200. HTTP-авторизация работает корректно.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c3.PNG" alt="Проверка HTTP-авторизации">
+                        <div class="screenshot-caption">Скриншот 3: Проверка HTTP-авторизации через curl - ответы 401 и 200</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 4: Просмотр данных -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Просмотр всех данных в админ-панели</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>После успешной авторизации администратор видит таблицу со всеми записями пользователей и статистику по языкам программирования.</p>
+                        
+                        <p><strong>Отображаемые колонки:</strong></p>
+                        <ul>
+                            <li>ID, ФИО, Телефон, Email, Дата рождения, Пол, Языки, Контракт, Логин</li>
+                            <li>Кнопки действий: "Изменить" и "Удалить"</li>
+                        </ul>
+                        
+                        <p><strong>Статистика:</strong></p>
+                        <ul>
+                            <li>Общее количество пользователей: 3</li>
+                            <li>Количество по каждому языку (C: 2, C++: 2, Java: 2, JavaScript: 1, Pascal: 1, PHP: 1, Python: 1)</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Все 3 записи отображаются в таблице. Статистика корректна.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c4.PNG" alt="Админ-панель с данными">
+                        <div class="screenshot-caption">Скриншот 4: Таблица со всеми записями и статистика</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 5: Проверка количества записей -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Проверка через SQL</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Проверка количества записей в базе данных через SQL-запрос.</p>
+                        
+                        <div class="code-block">SELECT COUNT(*) FROM application;</div>
+                        
+                        <div class="success">
+                            Выполнено: В базе данных 3 записи, что соответствует данным в админ-панели.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c5.PNG" alt="SQL запрос">
+                        <div class="screenshot-caption">Скриншот 5: Проверка количества записей в БД - 3 записи</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 6: Удаление записи -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Удаление записи администратором</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>При нажатии на кнопку "Удалить" появляется диалоговое окно подтверждения. После подтверждения запись удаляется из базы данных вместе со связанными данными о языках.</p>
+                        
+                        <p><strong>Механизм удаления:</strong></p>
+                        <ul>
+                            <li>Транзакция: сначала удаляются связи из <code>application_languages</code>, затем сама запись из <code>application</code></li>
+                            <li>Каскадное удаление: внешний ключ <code>ON DELETE CASCADE</code> автоматически удаляет связанные записи</li>
+                            <li>После удаления выводится сообщение об успехе</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Запись #3 успешно удалена. В таблице осталось 2 записи. Связанные записи в application_languages также удалены.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c6.PNG" alt="Удаление записи">
+                        <div class="screenshot-caption">Скриншот 6: Результат удаления записи #3 - сообщение об успехе</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 7: Проверка удаления -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Проверка удаления в БД</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Проверка, что запись действительно удалена из базы данных.</p>
+                        
+                        <div class="code-block">SELECT * FROM application WHERE id = 3;  -- Empty set (запись удалена)
+SELECT * FROM application_languages WHERE application_id = 3;  -- Empty set (связи удалены)</div>
+                        
+                        <div class="success">
+                            Выполнено: Запись с ID=3 полностью удалена из обеих таблиц. Каскадное удаление работает.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c7.PNG" alt="Проверка удаления в БД">
+                        <div class="screenshot-caption">Скриншот 7: SQL-запросы подтверждают полное удаление записи</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 8: Редактирование -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Редактирование записи</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>При нажатии на кнопку "Изменить" открывается форма редактирования с текущими данными записи.</p>
+                        
+                        <p><strong>Форма редактирования содержит:</strong></p>
+                        <ul>
+                            <li>Все поля: ФИО, Телефон, Email, Дата рождения, Пол, Биография, Контракт</li>
+                            <li>Множественный выбор языков (с уже выбранными значениями)</li>
+                            <li>Кнопки "Сохранить" и "Отмена"</li>
+                        </ul>
+                        
+                        <p><strong>Процесс сохранения:</strong></p>
+                        <ul>
+                            <li>Транзакция: UPDATE основных данных + DELETE старых связей + INSERT новых связей</li>
+                            <li>После сохранения - сообщение об успехе и обновлённая таблица</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Данные записи #2 изменены (ФИО: "Иванов Лемон лемоныч", телефон: "+79999999990", языки обновлены).
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c8.PNG" alt="Форма редактирования">
+                        <div class="screenshot-caption">Скриншот 8: Форма редактирования записи #2 с текущими данными</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 9: Проверка редактирования -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">9</div>
+                    <div class="step-title">Проверка сохранения изменений</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Проверка, что изменения действительно сохранились в базе данных.</p>
+                        
+                        <div class="code-block">SELECT fio, phone FROM application WHERE id = 2;
+-- Результат: Иванов Лемон лемоныч | +79999999990</div>
+                        
+                        <div class="success">
+                            Выполнено: Данные в БД обновлены. ФИО и телефон соответствуют введённым значениям.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c9.PNG" alt="Проверка изменений">
+                        <div class="screenshot-caption">Скриншот 9: Проверка сохранённых изменений через SQL-запрос</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 10: Статистика -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">10</div>
+                    <div class="step-title">Статистика по языкам программирования</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>В админ-панели отображается статистика: общее количество пользователей и количество выбравших каждый язык.</p>
+                        
+                        <p><strong>SQL-запрос для статистики:</strong></p>
+                        <div class="code-block">
+SELECT pl.name, COUNT(al.application_id) as count
+FROM programming_languages pl
+LEFT JOIN application_languages al ON pl.id = al.language_id
+GROUP BY pl.id, pl.name
+ORDER BY count DESC;
+                        </div>
+                        
+                        <p><strong>Результаты статистики:</strong></p>
+                        <ul>
+                            <li>C: 1 пользователь</li>
+                            <li>C++: 1 пользователь</li>
+                            <li>Java: 1 пользователь</li>
+                            <li>JavaScript: 1 пользователь</li>
+                            <li>PHP: 1 пользователь</li>
+                            <li>Python: 1 пользователь</li>
+                            <li>Остальные (Clojure, Go, Haskell, Pascal, Prolog, Scala): 0</li>
+                        </ul>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c10.PNG" alt="Статистика в админке">
+                        <div class="screenshot-caption">Скриншот 10: Статистика в админ-панели</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 11: Проверка статистики -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">11</div>
+                    <div class="step-title">Проверка статистики через SQL</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Проверка, что статистика в админ-панели совпадает с результатами прямого SQL-запроса.</p>
+                        
+                        <div class="success">
+                            Выполнено: Данные статистики в админ-панели полностью совпадают с результатами SQL-запроса.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c11.PNG" alt="SQL статистика">
+                        <div class="screenshot-caption">Скриншот 11: Результаты GROUP BY запроса совпадают с админ-панелью</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 12: Таблица admins -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">12</div>
+                    <div class="step-title">Хранение данных администратора в БД</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Данные администратора хранятся в отдельной таблице <code>admins</code>. Пароль хранится в виде MD5-хеша (32 символа).</p>
+                        
+                        <div class="code-block">SELECT * FROM admins;
+-- id: 1, login: admin, password_hash: 0192023a7bbd73250516f069df18b500</div>
+                        
+                        <div class="success">
+                            Выполнено: Таблица admins содержит запись администратора. Пароль хеширован.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c12.PNG" alt="Таблица admins">
+                        <div class="screenshot-caption">Скриншот 12: Содержимое таблицы admins - логин и хеш пароля</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 13: DRY -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">13</div>
+                    <div class="step-title">Проверка принципа DRY</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Принцип DRY (Don't Repeat Yourself) означает отсутствие дублирования кода.</p>
+                        
+                        <p><strong>Результаты проверки:</strong></p>
+                        <ul>
+                            <li>Функции валидации определены ТОЛЬКО в index.php (8 функций)</li>
+                            <li>HTML-формы: form.php (пользовательская), admin.php (редактирования), login.php (входа) - каждая для своей цели</li>
+                            <li>Подключение к БД унифицировано во всех файлах</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Дублирование отсутствует. Каждая функция определена один раз.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c13.PNG" alt="Проверка DRY">
+                        <div class="screenshot-caption">Скриншот 13: Проверка отсутствия дублирования функций и кода</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Шаг 14: KISS и DRY -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">14</div>
+                    <div class="step-title">Проверка принципов KISS и DRY</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <p>Принцип KISS (Keep It Simple, Stupid) означает простоту и понятность кода.</p>
+                        
+                        <p><strong>Результаты проверки:</strong></p>
+                        <ul>
+                            <li>Классы отсутствуют (0 классов) - для проекта такого размера ООП избыточен</li>
+                            <li>Закомментированных TODO-блоков нет</li>
+                            <li>Мёртвого кода нет</li>
+                            <li>Файлы разделены по назначению: index.php (логика), form.php (представление), login.php (вход), admin.php (админка)</li>
+                        </ul>
+                        
+                        <div class="success">
+                            Выполнено: Код простой, понятный, без избыточных абстракций.
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="c14.PNG" alt="Проверка KISS">
+                        <div class="screenshot-caption">Скриншот 14: Проверка принципов KISS и DRY - 0 классов, 0 TODO, чистый код</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Итого -->
+            <div class="step" style="border: 2px solid #28a745;">
+                <div class="step-header" style="background: #d4edda;">
+                    <div class="step-number" style="background: #28a745;">V</div>
+                    <div class="step-title" style="color: #155724;">Итоги выполнения задания 6</div>
+                </div>
+                <div class="step-body">
+                    <div class="step-description">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Использование HTTP-авторизации</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Отображение всех данных пользователей</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Удаление данных администратором</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">2 балла</span></td>
+                                <td style="padding: 8px;">Редактирование данных администратором</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Вывод статистики по языкам</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Хранение логина и хеша пароля в отдельной таблице</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;"><span class="badge badge-success">1 балл</span></td>
+                                <td style="padding: 8px;">Соблюдение принципов DRY и KISS</td>
+                                <td style="padding: 8px; color: #28a745;">Выполнено</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="success" style="margin-top: 20px;">
+                            <strong>Итого: 8 баллов из 8</strong><br>
+                            Все пункты задания выполнены успешно.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="footer">
+            <p>Задание 6 - Админ-панель с HTTP-авторизацией</p>
+       
+        </div>
+    </div>
+</body>
+</html>
